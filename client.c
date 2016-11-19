@@ -1,5 +1,3 @@
-
-
 #include <stdlib.h>
 #include <stdio.h>
 #include <sys/types.h>
@@ -44,8 +42,9 @@ main(int argc, char **argv)
   exit(3);
  }
 
- while (fgets(sendline, MAXLINE, stdin) != NULL) {
-
+ //while (fgets(sendline, MAXLINE, stdin) != NULL)
+while(1){
+  scanf("%s", sendline);
   send(sockfd, sendline, strlen(sendline), 0);
 
   if (recv(sockfd, recvline, MAXLINE,0) == 0){
@@ -54,8 +53,9 @@ main(int argc, char **argv)
    exit(4);
   }
   printf("%s", "String received from the server: ");
-  fputs(recvline, stdout);
- }
+  puts(recvline);
 
- exit(0);
+}
+ close(sockfd);
+ return 0;
 }
