@@ -1,3 +1,21 @@
+ 
+#include <stdlib.h>
+#include <stdio.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <string.h>
+#include <unistd.h>
+
+#define MAXLINE 4096 /*max text line length*/
+#define SERV_PORT 3000 /*port*/
+#define LISTENQ 8 /*maximum number of client connections*/
+
+int main (int argc, char **argv)
+{
+ int listenfd, connfd, n;
+ pid_t childpid;
+ socklen_t clilen;
  char buf[MAXLINE];
  struct sockaddr_in cliaddr, servaddr;
 
@@ -38,16 +56,25 @@
   close (listenfd);
 
   while ( (n = recv(connfd, buf, MAXLINE,0)) > 0)  {
+  char begin[MAXLINE]="Di quanto vuoi spostare il pedone? Premi N per una magia\n";
+   write(connfd, begin, strlen(begin) );
+   char x= buf[0];
 
-   char *str= "Inserisci il nome dell'oggetto che vuoi muovere";
-	
-   send(connfd, str, n, 0);
-   puts(buf);
+   //Ovviamente da implementare un bel sistemino di else if. Pare che uno debba inserire due volte x per uscire...
    
-
+   if (x=='x')break;
+   if(x =='N') {
+      char frase[MAXLINE]="Andando verso Nord!";
+      write(connfd, frase, strlen(frase));
+    }
+    //Sta roba dovrebbe pulire il Buffer in modo tale da riazzerarlo ad ogni input da client
+   buf[n]='\0';
+   fflush(stdout);
+    buf[0]='\0';
    //printf("%s","String received from and resent to the client:");
    //puts(buf);
    //send(connfd, buf, n, 0);
+
   }
 
   if (n < 0)
