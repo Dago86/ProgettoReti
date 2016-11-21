@@ -1,4 +1,4 @@
-#include 'pedpack.h'
+#include "pedpack.h"
 
 void riempi_pacchetto(pack pa, char d, int p){
 	pa.dir = d;

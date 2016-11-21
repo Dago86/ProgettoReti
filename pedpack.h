@@ -1,5 +1,5 @@
 #ifndef PEDPACK_H_
-#DEFINE PEDPACK_H_
+#define PEDPACK_H_
 
 // Il pedone vero e proprio
 typedef struct pedina{
