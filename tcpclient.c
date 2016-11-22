@@ -5,7 +5,9 @@
 #include <netinet/in.h>
 #include <string.h>
 #include <arpa/inet.h>
-#include "pedpack.h"
+#include "pedina.h"
+#include "pacchetto.h"
+
 
 #define MAXLINE 4096
 #define MAXSEND 10
@@ -18,8 +20,8 @@ int main(int argc, char **argv){
     struct sockaddr_in servaddr;            //struttura per l'indirizzo del socket
     pac pacForward;
     char sendline[MAXSEND], recvline[MAXLINE];
-    
-    
+
+
     //pacForward
 	char mov = ' ';
 	int m;
@@ -50,34 +52,48 @@ int main(int argc, char **argv){
         perror("Problem in connecting to the server");
             exit(3);
     }
-    
-    
+
+
 
 
         for(;;){
-            printf("Di quanto vuoi spostare il pedone? Attualmente si trova in %d , %d . Scegli tra nord(n), sud(s) \n", p.x, p.y);
-            
+            printf("In posizione (%d , %d)\n", p.x, p.y);
+            printf("Scegli la direzione del percorso! Tra nord, sud, est e ovest\n");
+
             mov = ' ';
-            printf("Di quanti passi vuoi muoverti?\n");
-            	scanf("%d", &m);
-            	
+
+
             while(mov!= 'n' && mov!= 's' && mov!= 'e' && mov!= 'o'){
-            	printf("Eh no, riprova\n");
             	scanf("%c", &mov);
              }
 
-            
-            
-            
+
+            printf("Di quanti passi vuoi muoverti?\n");
+            	scanf("%d", &m);
+
+
+
+
+
+
         	riempi_pacchetto(&pacForward, mov, m);
-        	
-        	send(sockfd, &pacForward, sizeof(p),0);
-        	
-        	
+
+          // invio pacchetto
+         if (mov != ' ')
+         if ((send(sockfd, &pacForward, sizeof(p),0) == -1))
+         {
+         printf("errore invio dati\n");
+         exit(1);
+         }
+
+
+
+
+
         	n=0;
-        	
+
         	while(n!=sizeof(p))
         	n = read(sockfd, &pacForward, sizeof(p));
-           } 	
+           }
     return 0;
 }
