@@ -6,7 +6,6 @@
 #include <string.h>
 #include <arpa/inet.h>
 #include "pedina.h"
-#include "pacchetto.h"
 
 
 #define MAXLINE 4096
@@ -57,16 +56,21 @@ int main(int argc, char **argv){
 
 
         for(;;){
-            printf("In posizione (%d , %d)\n", p.x, p.y);
-            printf("Scegli la direzione del percorso! Tra nord, sud, est e ovest\n");
+            printf("\n\n        In posizione:\n\n**************************************\n*(Asse ascisse: %d , Asse ordinate: %d)*\n**************************************\n\n", p.x, p.y);
+            printf("Scegli la direzione del percorso! Tra nord, sud, est e ovest. \n Se vuoi uscire premi x.\n\n");
 
             mov = ' ';
 
+			
 
-            while(mov!= 'n' && mov!= 's' && mov!= 'e' && mov!= 'o'){
+            while(mov!= 'n' && mov!= 's' && mov!= 'e' && mov!= 'o' && mov!='x'){
             	scanf("%c", &mov);
+			
              }
 
+				if(mov== 'x'){
+			    printf("Esco dal programma...\n"); break;
+				}
 
             printf("Di quanti passi vuoi muoverti?\n");
             	scanf("%d", &m);
@@ -80,20 +84,21 @@ int main(int argc, char **argv){
 
           // invio pacchetto
          if (mov != ' ')
-         if ((send(sockfd, &pacForward, sizeof(p),0) == -1))
+         if ((send(sockfd, &pacForward, sizeof(pac),0) == -1))
          {
          printf("errore invio dati\n");
          exit(1);
          }
 
-
+         usleep(2000);
 
 
 
         	n=0;
 
         	while(n!=sizeof(p))
-        	n = read(sockfd, &pacForward, sizeof(p));
+        	n = read(sockfd, &p, sizeof(p));
+          usleep(3000);
            }
     return 0;
 }
