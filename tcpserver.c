@@ -146,6 +146,64 @@ int main (int argc, char **argv){
                 movimento(&ricevuto, &p);		//la pedina viene spostata in base ai dati del pacchetto ricevuto dal client.
                 printf("La pedina e' stata spostata di %d passi in direzione %c. La pedina ha ora coordinate (%d, %d)", ricevuto.passi, ricevuto.dir, p.x, p.y);
                 write(connfd, &p, sizeof(ped));
+				fflush(stdout);
+				
+            }
+
+            if (n < 0) {
+                printf("%s\n", "Errore nella lettura.");
+                exit(0);
+            }
+            close(connfd);      // Chiusura della connessione.
+            printf("%s\n", "Connessione terminata correttamente.");
+            exit(0);
+        }
+    }
+}
+
+
+
+
+    // e la lunghezza della struttura dell'indirizzo.
+    if(bind (listenfd, (struct sockaddr *) &servaddr, sizeof(servaddr)) < 0)
+        err("Errore nel collegamento del socket");
+
+    // listen() dice al socket di rimanere in ascolto in attesa di eventuali richieste di connessione
+    // e inserisce le connessioni in arrivo in una coda.
+    // Nel nostro caso abbiamo settato la dimensione massima della coda a 8.
+    listen (listenfd, MAXQ);
+
+    printf("%s\n","Il server è attivo e in attesa di nuove connessioni.");
+
+    for ( ; ; ) {
+
+        clilen = sizeof(cliaddr);
+        // accept() inserisce le informazioni dell'indirizzo del client in connessione
+        // nella struttura cliaddr la cui dimensione è data da clilen.
+        // accept() ritorna un nuovo file descriptor per il socket collegato alla connessione in entrata.
+        // In questo modo il file descriptor originale continua ad essere utilizzato per
+        // rimanere in ascolto in caso di arrivo di altre connessioni.
+        connfd = accept (listenfd, (struct sockaddr *) &cliaddr, &clilen);
+        printf("%s\n","Richiesta in arrivo!");
+
+        if ( (childpid = fork ()) != 0 ) {    // Se fork() restituisce 0 significa che ha avuto successo e ha creato un processo figlio altrimenti c'e' stato un errore.
+            printf("%s\n", "Disconnessione del processo figlio.");
+            close(connfd);
+        }else{
+            printf ("%s\n","Processo figlio creato!");
+
+            int n;      // Variabile per controllare il numero di byte ricevuti dal client.
+
+            // Chiude il socket in ascolto.
+            close (listenfd);
+            ped p = {0, 0};
+            pac ricevuto = {' ', 0};
+
+
+            while (n = read(connfd, &ricevuto, sizeof(pac)) > 0) {      // read() ritorna la lunghezza del messaggio ricevuto dal client.
+                movimento(&ricevuto, &p);		//la pedina viene spostata in base ai dati del pacchetto ricevuto dal client.
+                printf("La pedina e' stata spostata di %d passi in direzione %c. La pedina ha ora coordinate (%d, %d)", ricevuto.passi, ricevuto.dir, p.x, p.y);
+                write(connfd, &p, sizeof(ped));
             }
 
             if (n < 0) {
