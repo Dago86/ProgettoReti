@@ -1,12 +1,17 @@
-#include "pedina.hpp"
+#include "pedina.h"
 
-void movimento(pac* pa, ped* pe){
-    if(pa->dir == 'a' || pa->dir == 'A')
-        pe->y += pa->passi;
-    else if(pa->dir == 'b' || pa->dir == 'B')
-        pe->y -= pa->passi;
-    else if(pa->dir == 'd' || pa->dir == 'D')
-        pe->x += pa->passi;
-    else if(pa->dir == 's' || pa->dir == 'S')
-        pe->x -= pa->passi;
+void movimento(struct pacchetto* pac,struct pedina* ped){
+    if(pac->dir == 'n' || pac->dir == 'N')
+        ped->y += pac->passi;
+    else if(pac->dir == 'o' || pac->dir == 'O')
+        ped->y -= pac->passi;
+    else if(pac->dir == 'e' || pac->dir == 'E')
+        ped->x += pac->passi;
+    else if(pac->dir == 's' || pac->dir == 'S')
+        ped->x -= pac->passi;
+}
+
+void riempi_pacchetto(struct pacchetto* pac, char d, int p){
+    pac->dir = d;
+    pac->passi = p;
 }
