@@ -63,7 +63,8 @@ int main(int argc, char **argv){
 
 			
 
-            while(mov!= 'n' && mov!= 's' && mov!= 'e' && mov!= 'o' && mov!='x'){
+            while(mov!= 'n' && mov!= 's' && mov!= 'e' && mov!= 'o' && mov!='x' && 
+				mov!= 'N' && mov!= 'S' && mov!= 'E' && mov!= 'O' && mov!='X'){
             	scanf("%c", &mov);
 			
              }
